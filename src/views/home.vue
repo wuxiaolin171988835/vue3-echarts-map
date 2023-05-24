@@ -1,16 +1,23 @@
 <template>
-  <Map :items="items"></Map>
+  <div
+    style="
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <Suspense>
+      <template #default>
+        <Map></Map>
+      </template>
+      <template #fallback> Loading... </template>
+    </Suspense>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
 import Map from "../components/Map.vue";
-import { getMapData } from "../api/index";
-const items = ref([]);
-onMounted(async () => {
-  const res = await getMapData();
-  items.value = res.data;
-});
 </script>
 
 <style lang="scss" scoped></style>

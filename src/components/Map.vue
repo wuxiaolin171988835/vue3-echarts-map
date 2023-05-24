@@ -1,37 +1,34 @@
 <template>
-  <div ref="chart" style="width: 100%; height: 400px"></div>
+  <div ref="chart" style="width: 100%; height: 600px"></div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted } from "vue";
 import * as echarts from "echarts";
 import chinaMap from "../assets/json/china.json";
-const props = defineProps({
-  items: {
-    type: Array,
-    required: true
-  }
-});
-const chart = ref();
-watch(
-  () => props.items,
-  () => init()
-);
+import { getMapData } from "../api/index";
 
+const chart = ref();
+const items = ref([]);
+const res = await getMapData();
+items.value = res.data;
+onMounted(() => {
+  init();
+});
 const init = () => {
   const myChart = echarts.init(chart.value);
   echarts.registerMap("china", chinaMap);
   const options = {
-    zoom: 4,
     series: [
       {
         type: "map",
         map: "china",
-        data: props.items,
+        data: items.value,
+        zoom: 1.2,
         label: {
           //标签样式
           show: true,
           color: "#fff",
-          fontSize: 12
+          fontSize: 10
         },
         itemStyle: {
           //地图区域样式
